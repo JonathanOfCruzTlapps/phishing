@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRITICAL_SYSTEM_OVERLOAD</title>
+    <style>
+        /* Estilos Base - Pantalla Completa Absoluta */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            color: #ff3333; /* Rojo dominante para generar pánico */
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            position: relative;
+            cursor: none; /* Esconde el cursor real */
+            animation: screenGlitch 0.2s infinite alternate;
+        }
+ 
+        /* Efecto de líneas CRT de monitor viejo */
+        .crt::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
+            background-size: 100% 4px, 6px 100%;
+            z-index: 100;
+            pointer-events: none;
+        }
+ 
+        /* LLUVIA DE CÓDIGO BINARIO CONSTANTE (100% CSS) */
+        .binary-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: rgba(0, 255, 102, 0.15); /* Verde Matrix de fondo */
+            font-size: 18px;
+            line-height: 24px;
+            overflow: hidden;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            animation: fadeToBlack 0.5s forwards;
+            animation-delay: 17.5s; /* Se desvanece antes de la infección masiva */
+        }
+ 
+        .binary-column {
+            position: absolute;
+            top: -300px;
+            white-space: pre;
+            animation: fall 5s infinite linear;
+        }
+ 
+        /* Columnas de lluvia cayendo a destiempo */
+        .b1 { left: 5%; animation-duration: 4s; animation-delay: 0s; }
+        .b2 { left: 20%; animation-duration: 6s; animation-delay: 1.5s; }
+        .b3 { left: 35%; animation-duration: 3s; animation-delay: 0.5s; }
+        .b4 { left: 50%; animation-duration: 7s; animation-delay: 2.2s; }
+        .b5 { left: 65%; animation-duration: 5s; animation-delay: 1s; }
+        .b6 { left: 80%; animation-duration: 4.5s; animation-delay: 3s; }
+        .b7 { left: 92%; animation-duration: 5.5s; animation-delay: 0.8s; }
+ 
+        /* INTRODUCCIÓN DE ANONYMOUS (0s a 4s) */
+        .anonymous-intro {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            z-index: 80;
+            opacity: 0;
+            animation: introReveal 4s ease-in-out forwards;
+        }
+ 
+        /* TEXTO "HOLAAAA" DESPUÉS DEL SVG (4s a 6s) */
+        .text-intro {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: #00ff66;
+            font-weight: bold;
+            letter-spacing: 5px;
+            text-shadow: 0 0 20px rgba(0, 255, 102, 0.8);
+            z-index: 80;
+            opacity: 0;
+            animation: textReveal 2s ease-in-out forwards;
+            animation-delay: 4s;
+        }
+ 
+        /* ESTILO GENERAL DE LAS VENTANAS */
+        .window {
+            position: absolute;
+            background-color: #0d0d0d;
+            border: 2px solid #ff3333;
+            box-shadow: 0 0 25px rgba(255, 51, 51, 0.5);
+            z-index: 10;
+            opacity: 0;
+            transform: scale(0.5);
+            pointer-events: none;
+            animation: popup 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fadeToBlack 0.5s forwards;
+            animation-delay: 0s, 17.5s; /* Se ocultan antes de la gran infección */
+        }
+ 
+        .window-header {
+            background-color: #ff3333;
+            color: #000000;
+            padding: 5px 10px;
+            font-weight: bold;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+ 
+        .window-close {
+            background: #000;
+            color: #ff3333;
+            border: 1px solid #000;
+            font-size: 10px;
+            padding: 0 5px;
+            font-weight: bold;
+        }
+ 
+        .window-body {
+            padding: 15px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+ 
+        /* --- DISTRIBUCIÓN Y TIEMPOS DE LAS VENTANAS --- */
+ 
+        #win1 {
+            width: 400px;
+            top: 15%;
+            left: 10%;
+            animation: popup 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fadeToBlack 0.5s forwards;
+            animation-delay: 6s, 17.5s;
+        }
+ 
+        #win2 {
+            width: 450px;
+            top: 25%;
+            right: 8%;
+            border-color: #ffaa00;
+            box-shadow: 0 0 25px rgba(255, 170, 0, 0.4);
+            animation: popup 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fadeToBlack 0.5s forwards;
+            animation-delay: 8s, 17.5s;
+        }
+        #win2 .window-header {
+            background-color: #ffaa00;
+        }
+ 
+        #win3 {
+            width: 380px;
+            bottom: 12%;
+            left: 15%;
+            animation: popup 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fadeToBlack 0.5s forwards;
+            animation-delay: 10s, 17.5s;
+        }
+ 
+        #win4 {
+            width: 320px;
+            bottom: 20%;
+            right: 15%;
+            animation: popup 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fadeToBlack 0.5s forwards;
+            animation-delay: 12s, 17.5s;
+        }
+ 
+        #win5 {
+            width: 650px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            border-width: 4px;
+            z-index: 50;
+            animation: popupCenter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fadeToBlack 0.5s forwards;
+            animation-delay: 14s, 17.5s;
+        }
+        #win5 .window-body {
+            text-align: center;
+            padding: 30px;
+        }
+ 
+        /* BARRA DE PROGRESO EN VENTANA 2 */
+        .progress-bar {
+            width: 100%;
+            height: 15px;
+            border: 1px solid #ffaa00;
+            margin-top: 10px;
+            background: rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #ffaa00;
+            width: 0;
+            animation: fillBar 4s linear forwards;
+            animation-delay: 8.5s;
+        }
+ 
+        /* TEXTO PARPADEANTE */
+        .blink {
+            animation: blinker 0.6s steps(2, start) infinite;
+        }
+ 
+        /* ALARMA EN TODA LA PANTALLA */
+        .screen-flash {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(255, 0, 0, 0.15);
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0;
+            animation: redAlert 0.4s infinite alternate, fadeToBlack 0.5s forwards;
+            animation-delay: 12s, 17.5s;
+        }
+ 
+        /* --- TRÁNSITO DE INSTALACIÓN MASIVA DE VIRUS (18s a 22s) --- */
+        .virus-injection-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #050000;
+            z-index: 150;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            box-sizing: border-box;
+            padding: 20px;
+            animation: showScreen 0.2s forwards, fadeToBlack 0.5s forwards;
+            animation-delay: 17.8s, 21.5s;
+        }
+ 
+        .virus-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #ff1111;
+            text-transform: uppercase;
+            text-shadow: 0 0 25px #ff1111;
+            margin-bottom: 15px;
+            letter-spacing: 4px;
+            text-align: center;
+            animation: textGlitch 0.15s infinite alternate;
+        }
+ 
+        .virus-counter-box {
+            background: #110000;
+            border: 3px solid #ff1111;
+            padding: 20px 50px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 0 35px rgba(255, 17, 17, 0.4);
+            margin-bottom: 30px;
+        }
+ 
+        .counter-label {
+            font-size: 14px;
+            color: #888;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+ 
+        .counter-number {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: #ff3333;
+            text-shadow: 0 0 10px #ff3333;
+        }
+        .counter-number::after {
+            content: "48";
+            animation: countUp 3.2s steps(6) forwards;
+            animation-delay: 18s;
+        }
+ 
+        .installation-list {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #330000;
+            padding: 15px;
+            height: 160px;
+            overflow: hidden;
+            font-size: 14px;
+            color: #00ff66;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.2);
+        }
+ 
+        .log-line {
+            margin: 4px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid transparent;
+            width: 0;
+            animation: typeLine 0.4s steps(40) forwards;
+        }
+ 
+        .l1 { animation-delay: 18s; color: #ff5555; }
+        .l2 { animation-delay: 18.5s; color: #ff2222; font-weight: bold; }
+        .l3 { animation-delay: 19s; color: #ff0000; text-shadow: 0 0 5px #ff0000; }
+        .l4 { animation-delay: 19.5s; color: #ff1111; }
+        .l5 { animation-delay: 20s; color: #ff0000; font-weight: bold; text-transform: uppercase; }
+        .l6 { animation-delay: 20.5s; color: #ff0000; font-size: 16px; }
+ 
+        .big-progress {
+            width: 100%;
+            max-width: 700px;
+            height: 30px;
+            border: 2px solid #ff1111;
+            background: #000;
+            margin-top: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .big-progress-fill {
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                #ff1111,
+                #ff1111 10px,
+                #990000 10px,
+                #990000 20px
+            );
+            width: 0%;
+            animation: fillBarMax 3.4s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
+            animation-delay: 18s;
+        }
+ 
+        /* INTERFERENCIAS FINALES (Se activan en el 21s) */
+        .static-noise {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-radial-gradient(rgba(0,0,0,0.8), rgba(255,255,255,0.2) 2px, transparent 40px);
+            background-size: 10px 10px;
+            opacity: 0;
+            z-index: 180;
+            pointer-events: none;
+            animation: staticFlicker 0.08s infinite alternate;
+            animation-delay: 21s;
+        }
+ 
+        /* PANTALLAZO AZUL DE WINDOWS (22s) */
+        .bsod {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #0078d7;
+            color: #ffffff;
+            font-family: "Segoe UI", -apple-system, sans-serif;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 10% 15%;
+            box-sizing: border-box;
+            opacity: 0;
+            pointer-events: none;
+            animation: showBSOD 0.1s forwards;
+            animation-delay: 22s;
+        }
+ 
+        .bsod-sad-face {
+            font-size: 110px;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+ 
+        .bsod-title {
+            font-size: 24px;
+            line-height: 1.4;
+            max-width: 800px;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+ 
+        .bsod-details {
+            display: flex;
+            align-items: center;
+            margin-top: 30px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+ 
+        /* Contenedor del SVG para dar margen */
+        .bsod-qr-container {
+            margin-right: 25px;
+            flex-shrink: 0;
+        }
+ 
+        /* --- KEYFRAMES DE ANIMACIÓN --- */
+ 
+        @keyframes fall {
+            0% { top: -300px; }
+            100% { top: 100%; }
+        }
+ 
+        @keyframes screenGlitch {
+            0% { transform: translate(0, 0) skew(0deg); }
+            95% { transform: translate(0, 0) skew(0deg); }
+            97% { transform: translate(-3px, 2px) skew(2deg); }
+            100% { transform: translate(3px, -1px) skew(-1deg); }
+        }
+ 
+        @keyframes textGlitch {
+            0% { transform: skew(0deg); filter: blur(0px); }
+            10% { transform: skew(5deg); filter: blur(1px); }
+            20% { transform: skew(-5deg); filter: blur(0px); }
+            100% { transform: skew(0deg); }
+        }
+ 
+        @keyframes introReveal {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+                filter: drop-shadow(0 0 0px rgba(0, 255, 102, 0));
+            }
+            30% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+                filter: drop-shadow(0 0 20px rgba(0, 255, 102, 0.8));
+            }
+            80% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+                filter: drop-shadow(0 0 20px rgba(0, 255, 102, 0.8));
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1.1);
+                filter: drop-shadow(0 0 0px rgba(0, 255, 102, 0));
+            }
+        }
+ 
+        @keyframes textReveal {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); }
+        }
+ 
+        @keyframes popup {
+            to { opacity: 1; transform: scale(1); }
+        }
+ 
+        @keyframes popupCenter {
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+ 
+        @keyframes fillBar {
+            to { width: 100%; }
+        }
+ 
+        @keyframes fillBarMax {
+            to { width: 100%; }
+        }
+ 
+        @keyframes countUp {
+            0% { content: "105"; }
+            16% { content: "274"; }
+            33% { content: "512"; }
+            50% { content: "891"; }
+            66% { content: "1304"; }
+            83% { content: "2498"; }
+            100% { content: "4820"; }
+        }
+ 
+        @keyframes typeLine {
+            to { width: 100%; }
+        }
+ 
+        @keyframes redAlert {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+ 
+        @keyframes blinker {
+            to { visibility: hidden; }
+        }
+ 
+        @keyframes staticFlicker {
+            0% { opacity: 0.4; transform: translate(1px, -1px); }
+            100% { opacity: 0.9; transform: translate(-1px, 1px); }
+        }
+ 
+        @keyframes fadeToBlack {
+            to {
+                opacity: 0;
+                transform: scale(0.9);
+                filter: blur(10px);
+            }
+        }
+ 
+        @keyframes showScreen {
+            to {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+ 
+        @keyframes showBSOD {
+            to {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+    </style>
+</head>
+<body class="crt">
+ 
+    <!-- Ruido Estático de Señal Perdida -->
+    <div class="static-noise"></div>
+ 
+    <!-- Destello de Alarma de Fondo -->
+    <div class="screen-flash"></div>
+ 
+    <!-- Fondo de lluvia binaria continua -->
+    <div class="binary-bg">
+        <div class="binary-column b1">110101 010110 110111<br>010110 011000<br>110001 011110 011101<br>101011 011011 110110</div>
+        <div class="binary-column b2">111010 101011 110011<br>010101 011011 101001<br>110011 010110 010011</div>
+        <div class="binary-column b3">001101 010010 111100<br>110011 101101 110101<br>010110 011011 010110</div>
+        <div class="binary-column b4">011000 011001 011011<br>011100 011101 011000<br>101011 110110 010110</div>
+        <div class="binary-column b5">101010 001111 010101<br>110011 011010 111100<br>110011 010110 010011</div>
+        <div class="binary-column b6">110101 110011 101101<br>011110 011101 010110<br>101110 110011 010110</div>
+        <div class="binary-column b7">010110 111010 010101<br>110011 101011 110011<br>011011 110110 101011</div>
+    </div>
+ 
+    <!-- LOGO DE ANONYMOUS DE INTRODUCCIÓN (0s - 4s) -->
+    <div class="anonymous-intro">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <path d="M200 40 C110 40 40 110 40 200 C40 290 110 360 200 360 C290 360 360 290 360 200 C360 110 290 40 200 40 Z" fill="none" stroke="#00ff66" stroke-width="6"/>
+            <path d="M100 150 Q150 100 190 145" fill="none" stroke="#00ff66" stroke-width="7" stroke-linecap="round"/>
+            <path d="M300 150 Q250 100 210 145" fill="none" stroke="#00ff66" stroke-width="7" stroke-linecap="round"/>
+            <path d="M115 175 Q150 145 175 170" fill="none" stroke="#00ff66" stroke-width="5" stroke-linecap="round"/>
+            <path d="M285 175 Q250 145 225 170" fill="none" stroke="#00ff66" stroke-width="5" stroke-linecap="round"/>
+            <polygon points="200,185 180,245 220,245" fill="none" stroke="#00ff66" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M150 230 Q200 215 200 235 Q200 215 250 230 Q285 205 305 185 Q265 255 200 245 Q135 255 95 185 Q115 205 150 230 Z" fill="#00ff66"/>
+            <path d="M150 260 Q200 310 250 260" fill="none" stroke="#00ff66" stroke-width="5" stroke-linecap="round"/>
+            <path d="M185 295 L200 345 L215 295 Z" fill="#00ff66"/>
+        </svg>
+    </div>
+ 
+    <!-- TEXTO "HOLAAAA" (4s - 6s) -->
+    <div class="text-intro">holaaaa</div>
+ 
+    <!-- VENTANA 1: INTRUSIÓN (6s) -->
+    <div class="window" id="win1">
+        <div class="window-header">
+            <span>[!] INTRUSION_DETECTED.EXE</span>
+            <button class="window-close">X</button>
+        </div>
+        <div class="window-body">
+            <span style="color: #00ff66;">&gt; Acceso remoto forzado ... OK</span><br>
+            <span style="color: #00ff66;">&gt; Inyectando payload en memoria kernel... OK</span><br>
+            <span>&gt; Puerto de red compromised: <span class="blink">PORT_445</span></span><br>
+            <span style="color: #ffffff; font-weight: bold;">[ESTADO: INFILTRACIÓN COMPLETA]</span>
+        </div>
+    </div>
+ 
+    <!-- VENTANA 2: EXTRACCIÓN (8s) -->
+    <div class="window" id="win2">
+        <div class="window-header">
+            <span>DATA_HARVESTER_v3.0</span>
+            <button class="window-close">X</button>
+        </div>
+        <div class="window-body">
+            <span>Robando credenciales guardadas de navegadores...</span><br>
+            <span style="color: #ffffff;">Descargando contraseñas, cookies de sesión e historial...</span>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div style="text-align: right; font-size: 11px; margin-top: 5px;" class="blink">ENVIANDO A SERVIDOR EXTERNO...</div>
+        </div>
+    </div>
+ 
+    <!-- VENTANA 3: DESTRUCCIÓN (10s) -->
+    <div class="window" id="win3">
+        <div class="window-header">
+            <span>DESTRUCTIVE_MODE_ACTIVE</span>
+            <button class="window-close">X</button>
+        </div>
+        <div class="window-body">
+            <span style="color: #ff3333; font-weight: bold;">[!] BORRANDO ARCHIVOS CRÍTICOS</span><br>
+            <span>- Eliminando: C:/Users/Documents/... <span style="color:#00ff66;">OK</span></span><br>
+            <span>- Eliminando: C:/Windows/System32/drivers/... <span style="color:#00ff66;">OK</span></span><br>
+            <span class="blink" style="color: #ff3333;">ERROR DE SISTEMA: Ficheros de arranque corruptos.</span>
+        </div>
+    </div>
+ 
+    <!-- VENTANA 4: CÁMARA Y GEOLOCALIZACIÓN (12s) -->
+    <div class="window" id="win4">
+        <div class="window-header">
+            <span>WEBCAM_HIJACK.SH</span>
+            <button class="window-close">X</button>
+        </div>
+        <div class="window-body">
+            <span>Hardware encontrado: <span style="color:#00ff66;">Integrated_Camera_01</span></span><br>
+            <span>Estado de cámara: <span class="blink" style="color:#ff3333; font-weight:bold;">GRABANDO</span></span><br>
+            <span>Ubicación aproximada: <span style="color:#ffffff;">Jalisco, México</span></span><br>
+            <span style="font-size: 10px; color:#888;">(Fotografías guardadas en servidor oculto)</span>
+        </div>
+    </div>
+ 
+    <!-- VENTANA 5 (CENTRAL): EXTORSIÓN RANSOMWARE (14s) -->
+    <div class="window" id="win5">
+        <div class="window-header">
+            <span>!!! ADVERTENCIA CRÍTICA DE SEGURIDAD !!!</span>
+            <button class="window-close">X</button>
+        </div>
+        <div class="window-body">
+            <h2 style="margin: 0 0 15px 0; font-size: 24px; text-shadow: 0 0 10px #ff3333;">TODOS TUS ARCHIVOS HAN SIDO CIFRADOS</h2>
+            <p style="color: #ffffff; font-size: 14px;">Tus fotos, vídeos, bases de datos y archivos personales han sido encriptados con un algoritmo de grado militar indescifrable.</p>
+            <p style="font-size: 12px; color: #777; margin: 15px 0 0 0;">ID de Víctima: <span style="color:#00ff66;">ANON-X-9821</span> | No intentes reiniciar o apagar la máquina.</p>
+        </div>
+    </div>
+ 
+    <!-- PANTALLA DE INFECCIÓN MASIVA (18s - 22s) -->
+    <div class="virus-injection-screen">
+        <div class="virus-title">WARNING: OVERLOAD INFECTION</div>
+       
+        <div class="virus-counter-box">
+            <div class="counter-label">TROYANOS E INFECCIONES DETECTADAS</div>
+            <div class="counter-number"></div>
+        </div>
+ 
+        <div class="installation-list">
+            <div class="log-line l1">&gt;&gt; Descargando backdoor: "Trojan.Win32.Generic" ... OK</div>
+            <div class="log-line l2">&gt;&gt; Ejecutando script: "rootkit_reboot_override.sh" [EXEC_ROOT]</div>
+            <div class="log-line l3">&gt;&gt; CORROMPIENDO TABLA DE PARTICIONES MBR (MASTER BOOT RECORD)</div>
+            <div class="log-line l4">&gt;&gt; Inundación de memoria kernel: Overflowing stack...</div>
+            <div class="log-line l5">&gt;&gt; !!! CRITICAL CRASH INITIATED: TERMINATING CORE PROCESSES !!!</div>
+            <div class="log-line l6" style="text-align: center;">-- HARDWARE FAILURE SIMULATED --</div>
+        </div>
+ 
+        <div class="big-progress">
+            <div class="big-progress-fill"></div>
+        </div>
+    </div>
+ 
+    <!-- PANTALLAZO AZUL DE WINDOWS (22s) -->
+    <div class="bsod">
+        <div class="bsod-sad-face">:(</div>
+        <div class="bsod-title">
+            Tu PC sufrió un problema y necesita reiniciarse. Solo estamos recopilando información sobre el error y, después, se reiniciará automáticamente.
+        </div>
+        <div style="font-size: 20px; margin-bottom: 40px;">100% completo</div>
+       
+        <div class="bsod-details">
+            <div class="bsod-qr-container">
+                <!-- CÓDIGO QR REALIZADO 100% EN SVG -->
+                <svg width="110" height="110" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="background-color: #ffffff; padding: 8px; box-sizing: border-box; display: block;">
+                    <!-- Esquina Superior Izquierda (Patrón de posición) -->
+                    <rect x="0" y="0" width="30" height="30" fill="#000000" />
+                    <rect x="4" y="4" width="22" height="22" fill="#ffffff" />
+                    <rect x="8" y="8" width="14" height="14" fill="#000000" />
+                   
+                    <!-- Esquina Superior Derecha (Patrón de posición) -->
+                    <rect x="70" y="0" width="30" height="30" fill="#000000" />
+                    <rect x="74" y="4" width="22" height="22" fill="#ffffff" />
+                    <rect x="78" y="8" width="14" height="14" fill="#000000" />
+                   
+                    <!-- Esquina Inferior Izquierda (Patrón de posición) -->
+                    <rect x="0" y="70" width="30" height="30" fill="#000000" />
+                    <rect x="4" y="74" width="22" height="22" fill="#ffffff" />
+                    <rect x="8" y="78" width="14" height="14" fill="#000000" />
+ 
+                    <!-- Pequeño alineador inferior derecho -->
+                    <rect x="74" y="74" width="10" height="10" fill="#000000" />
+                    <rect x="76" y="76" width="6" height="6" fill="#ffffff" />
+                    <rect x="78" y="78" width="2" height="2" fill="#000000" />
+ 
+                    <!-- Estructuras y píxeles de datos falsos (Simulación de QR) -->
+                    <rect x="38" y="0" width="6" height="6" fill="#000000" />
+                    <rect x="50" y="0" width="12" height="4" fill="#000000" />
+                    <rect x="44" y="12" width="16" height="6" fill="#000000" />
+                    <rect x="36" y="22" width="6" height="14" fill="#000000" />
+                    <rect x="56" y="18" width="10" height="10" fill="#000000" />
+                    <rect x="38" y="32" width="14" height="6" fill="#000000" />
+                   
+                    <rect x="6" y="38" width="12" height="6" fill="#000000" />
+                    <rect x="18" y="48" width="6" height="16" fill="#000000" />
+                    <rect x="0" y="58" width="16" height="6" fill="#000000" />
+                   
+                    <rect x="38" y="44" width="16" height="16" fill="#000000" />
+                    <rect x="44" y="50" width="4" height="4" fill="#ffffff" />
+                   
+                    <rect x="76" y="38" width="12" height="6" fill="#000000" />
+                    <rect x="86" y="44" width="6" height="16" fill="#000000" />
+                    <rect x="70" y="56" width="12" height="12" fill="#000000" />
+                   
+                    <rect x="38" y="70" width="6" height="16" fill="#000000" />
+                    <rect x="50" y="82" width="16" height="6" fill="#000000" />
+                    <rect x="44" y="90" width="12" height="10" fill="#000000" />
+                    <rect x="58" y="92" width="6" height="6" fill="#ffffff" />
+                </svg>
+            </div>
+            <div>
+                Para obtener más información sobre este problema y posibles correcciones, visita:<br>
+                <span style="font-weight: bold; color: rgba(255,255,255,0.8);">Solución de problemas de reinicios inesperados de Windows y errores de código de detención | Microso…</span><br><br>
+                Si llamas a un proveedor de soporte técnico, ofréceles esta información:<br>
+                Código de detención: <span style="font-weight: bold;">CRITICAL_PROCESS_DIED</span>
+            </div>
+        </div>
+    </div>
+ 
+</body>
+</html>
